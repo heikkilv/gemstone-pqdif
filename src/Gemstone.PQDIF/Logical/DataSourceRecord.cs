@@ -67,7 +67,7 @@ namespace Gemstone.PQDIF.Logical
         /// </summary>
         /// <param name="dataSourceTypeID">Globally unique identifier for the data source type.</param>
         /// <returns>The information about the data source type.</returns>
-        public static Identifier? GetInfo(Guid dataSourceTypeID) => 
+        public static Identifier? GetInfo(Guid dataSourceTypeID) =>
             DataSourceTypeLookup.TryGetValue(dataSourceTypeID, out Identifier? identifier) ? identifier : null;
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Gemstone.PQDIF.Logical
         {
             get
             {
-                Tag? dataSourceTypeTag = Tag.GetTag(DataSourceRecord.VendorIDTag);
+                Tag? dataSourceTypeTag = Tag.GetTag(DataSourceRecord.DataSourceTypeIDTag);
 
                 if (s_dataSourceTypeTag != dataSourceTypeTag)
                 {
@@ -425,7 +425,7 @@ namespace Gemstone.PQDIF.Logical
         /// Removes the element identified by the given tag from the record.
         /// </summary>
         /// <param name="tag">The tag of the element to be removed.</param>
-        public void RemoveElement(Guid tag) => 
+        public void RemoveElement(Guid tag) =>
             m_physicalRecord.Body.Collection.RemoveElementsByTag(tag);
 
         #endregion

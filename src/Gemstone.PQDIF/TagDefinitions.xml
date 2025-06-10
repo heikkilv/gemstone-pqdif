@@ -1585,6 +1585,12 @@
                 <value>f7e9eb70-6f1d-11d6-9cb3-0020e010453b</value>
                 <description>Elcom</description>
             </id>
+            <id>
+                <name>Electrotek</name>
+                <standardName>ID_VENDOR_ELECTROTEK</standardName>
+                <value>e6b5170a-f747-11cf-9d89-0080c72e70a3</value>
+                <description>Electrotek Concepts</description>
+            </id>
         </tagVendorID>
         <tagEquipmentID>
             <id>

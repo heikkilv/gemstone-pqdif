@@ -426,22 +426,36 @@ namespace Gemstone.PQDIF.Physical
                 throw new InvalidOperationException("PQDIF file is not open.");
 
             const int HeaderSize = 64;
-            int position = (int)m_stream.Position;
+            long position = m_stream.Position;
             byte[] headerData = await ReadBytesAsync(HeaderSize);
 
             using MemoryStream memoryStream = new(headerData);
             using BinaryReader reader = new(memoryStream);
 
+            Guid recordSignature = new (reader.ReadBytes(16));
+            Guid recordTypeTag = new (reader.ReadBytes(16));
+            int headerSize = reader.ReadInt32();
+            int bodySize = reader.ReadInt32();
+            long nextRecordPosition = reader.ReadInt32();
+            uint checksum = reader.ReadUInt32();
+            byte[] reserved = reader.ReadBytes(16);
+
+            // handle overflow that happens with files over 2 GB
+            if (nextRecordPosition != 0)
+            {
+                nextRecordPosition = position + headerSize + bodySize;
+            }
+
             return new RecordHeader
             {
                 Position = position,
-                RecordSignature = new Guid(reader.ReadBytes(16)),
-                RecordTypeTag = new Guid(reader.ReadBytes(16)),
-                HeaderSize = reader.ReadInt32(),
-                BodySize = reader.ReadInt32(),
-                NextRecordPosition = reader.ReadInt32(),
-                Checksum = reader.ReadUInt32(),
-                Reserved = reader.ReadBytes(16)
+                RecordSignature = recordSignature,
+                RecordTypeTag = recordTypeTag,
+                HeaderSize = headerSize,
+                BodySize = bodySize,
+                NextRecordPosition = nextRecordPosition,
+                Checksum = checksum,
+                Reserved = reserved
             };
         }
 
@@ -549,7 +563,7 @@ namespace Gemstone.PQDIF.Physical
         {
             int size = recordBodyReader.ReadInt32();
             CollectionElement collection = new(size);
-            
+
             for (int i = 0; i < size; i++)
             {
                 collection.AddElement(ReadElement(recordBodyReader));

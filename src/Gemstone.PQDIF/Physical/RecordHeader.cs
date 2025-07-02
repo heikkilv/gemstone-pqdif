@@ -61,7 +61,7 @@ namespace Gemstone.PQDIF.Physical
         /// <summary>
         /// Gets or sets the position of this record.
         /// </summary>
-        public int Position { get; set; }
+        public long Position { get; set; }
 
         /// <summary>
         /// Gets or sets the record's globally unique identifier.
@@ -93,7 +93,7 @@ namespace Gemstone.PQDIF.Physical
         /// Gets or sets the position of the next record in the PQDIF file.
         /// This value is a byte offset relative to the beginning of the file.
         /// </summary>
-        public int NextRecordPosition { get; set; }
+        public long NextRecordPosition { get; set; }
 
         /// <summary>
         /// Optional checksum (such as a 32-bit CRC)
